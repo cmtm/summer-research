@@ -16,7 +16,7 @@ methods such as an adjacency matrix or a lossy method?
 
 == functions
 
-=== storeMessage( [log2(l)]*c bits)
+=== storeMessage( c characters in range log2(l) )
 
 returns nothing.
 
@@ -26,14 +26,15 @@ know if the message was successfully stored?
 can storage take variable time between stores on a single architecture? 
 How about between stores on different architectures?
 
-=== readMessage( [log2(l)]*c trits)
+=== readMessage( c characters in range log2(l); some characters can be erased)
 
-trit can be -1, 0, +1
+What exactly does a read return? Can it determine if a no message 
+that matches the input exists? Can it ever return a message with 
+characters that are different from the known input characters?
+ex: 110x   returns   1111
 
-What exactly does a read return? Can it determine if a no message that 
-matches the input exists? Can it ever return a message with bits that 
-are different from the known input bits?
-ex: 110x  returns   1111
-
-should return [log2(l)]*c bits  and possibly a found/not found flag
-Should also return the number of iterations taken to read message
+should return c characters in range log2(l)  and possibly a 
+found/not found flag Should also return the number of iterations 
+taken to read message. There is also the possibility of several 
+characters being valid given a certain erasure. Should a list of 
+these characters be returned or can the hardware not handle this?
