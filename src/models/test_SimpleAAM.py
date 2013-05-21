@@ -62,12 +62,14 @@ class TestSequenceFunctions(unittest.TestCase):
 		msgsErased = []
 		for j in range(cCount):
 			r = random.randrange(cCount)
-			msgsErased.append([None if r == i else msg[j][i] for i in range(cCount)])
+			msgsErased.append([None if r == i else msgs[j][i] for i in range(cCount)])
 		
 		for msg in msgsErased:
 			AAM_ut.readMessage(msg)
 		
 		self.assertEqual(msgs, msgsErased)
+	
+	# TODO: create a test that verifies behavior when AAM becomes saturated
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,8 +1,9 @@
 import networkx as nx
 import math
 import itertools
+import AAM
 
-class SimpleAAM:
+class SimpleAAM(AAM.AAM):
 	
 	def __init__(self, clusterSize, clusterCount):
 		super(SimpleAAM, self).__init__(clusterSize, clusterCount)
@@ -32,21 +33,22 @@ class SimpleAAM:
 				return None
 		"""
 		try:
-			neighborsList = [frozenset( all_neighbors(self.network, char) ) \
-								for char in knowCharacters]
-		except NetworkXError:
+			neighborsList = [frozenset( nx.all_neighbors(self.network, char) ) \
+								for char in knownCharacters]
+		except nx.NetworkXError:
 			return None
 		
-		activatedNodes = set.intersection(*neighborsList)
+		activatedNodes = frozenset.intersection(*neighborsList)
 		
-		"""
+		
 		# this implementation produces an "arbitrary" character
 		# in the case of multiple characters per position
 		for node in activatedNodes:
 			partialMessage[node[0]] = node[1]
 		
-		"""
 		
+		
+		"""
 		# This implmentation returns lists where single characters
 		# would have been instead
 		for node in activatedNodes:
@@ -54,7 +56,7 @@ class SimpleAAM:
 				partialMessage[node[0]] = [node[1]]
 			else:
 				partialMessage[node[0]].append(node[1])
-		
+		"""
 		
 		
 

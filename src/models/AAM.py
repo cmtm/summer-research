@@ -1,6 +1,6 @@
 
 
-class AAM:
+class AAM(object):
 	
 	def __init__(self, clusterSize, clusterCount):
 		
