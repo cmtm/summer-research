@@ -1,0 +1,39 @@
+= Autoassociative memory
+
+Abstract Autoassociative memory
+
+== parameters
+
+n: number of neurons
+c: cluster size
+l: number of clusters  (l = n/c)
+
+Only two of these are needed, which two are the most descriptive?
+
+Do all out Autoassociative memories (AAMs) store edges as a well 
+defined list of node-node pairs or do some of them use different 
+methods such as an adjacency matrix or a lossy method?
+
+== functions
+
+=== storeMessage( [log2(l)]*c bits)
+
+returns nothing.
+
+Can something be returned such as a pass/fail or do all AAMs not 
+know if the message was successfully stored?
+
+can storage take variable time between stores on a single architecture? 
+How about between stores on different architectures?
+
+=== readMessage( [log2(l)]*c trits)
+
+trit can be -1, 0, +1
+
+What exactly does a read return? Can it determine if a no message that 
+matches the input exists? Can it ever return a message with bits that 
+are different from the known input bits?
+ex: 110x  returns   1111
+
+should return [log2(l)]*c bits  and possibly a found/not found flag
+Should also return the number of iterations taken to read message
