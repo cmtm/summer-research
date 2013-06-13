@@ -12,9 +12,8 @@ class SimpleAAM(AAM.AAM):
 		
 	
 	def storeMessage(self, message):
-		if len(message) != self.clusterCount:
-			raise Exception("Inappropriate message length.")
-		# TODO: check size of characters. Ensure they're small enough
+		super(SimpleAAM, self).storeMessage(message)
+
 		edges = itertools.combinations(enumerate(message), 2)
 		
 		self.network.add_edges_from(edges)

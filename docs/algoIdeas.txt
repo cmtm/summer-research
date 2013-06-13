@@ -1,0 +1,6 @@
+Use case 1
+
+Because of the inability to selectivly erase messages, it may be 
+beneficial to have several cache-sized AAMs. These AAMs can vary in size from those having a few dozen messages which can be used for lookup-table and others can have a few thousand or million messages which can be used for storing larger database like structures. These AAMs will be able to be quickly cleared (more important with the small ones) since the lookup tables needed could change fast in a program. Since the AAMs are limited, they will be used to store data that frequently  The AAMs would be used to store the very commonly used These AAMs will be able to store a few hundred messages and
+
+If the

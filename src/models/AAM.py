@@ -14,7 +14,9 @@ class AAM(object):
 		self.fanalCount = clusterSize * clusterCount
 	
 	def storeMessage(self, message):
-		pass
+		if len(message) != self.clusterCount:
+			raise Exception("Inappropriate message length.")
+		# TODO: check size of characters. Ensure they're small enough
 	
 	def readMessage(self, partialMessage):
 		pass

@@ -1,0 +1,12 @@
+<chrisMorin> Hi, I'm new to using QEMU. I was curious if there was somekind of plugin infrastructure. I've heard it mentioned but haven't been able to find much detailed information on the net
+<chrisMorin> The reason is I'm looking to create a custom periferal and emulate it along wiht a preexisting CPU
+<chrisMorin> does amyone know of a good place to start?
+<agraf> chrisMorin: QEMU handles device models similar to plugins internally
+<agraf> chrisMorin: but they aren't really plugins in the classical sense
+<agraf> chrisMorin: they're always compiled in, there's no external library interface
+<agraf> chrisMorin: so the best place to start would be to fetch the QEMU source code, check out how devices are modeled, copy a simple one and modify it to your needs ;)
+<chrisMorin> thanks, I'm browsing the code now. Could you tell me where one device model is. Say for the ARM architecture
+<agraf> chrisMorin: the easiest way to find one is to check out a machine model and see what it creates
+<agraf> chrisMorin: machine models for ARM are in hw/arm/
+<chrisMorin> sweet, thanks a bunch
+<agraf> chrisMorin: hw/misc/arm_l2x0.c looks simple
