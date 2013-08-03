@@ -1,0 +1,64 @@
+AAM family: specifies range of sizes for AAM parameters
+	They exist to efficiently deal with the byte addressable constraint and different purposes
+
+
+Parameters
+
+	max cluster cout = c
+	max cluster size = s
+	max erasures/c   = e
+	max responders/s = r
+
+	e * r = z
+
+
+Input
+	
+	       command         argument
+	bytes     4                
+
+	Store
+		       command         message
+		bytes     4             lg(s)/8 * c
+
+	Read
+		       command         message
+		bytes     4             lg(s)/8 * c		
+
+
+Output
+
+	            code       numberOfResponders[]     responder[][]
+	max bits     4          lg(s*r) * c*e          lg(s) * s*r * c*e
+
+	total bits ~= lg(s) * s * c * z
+
+
+
+lining things up:
+
+	make  lg(s*r)  a multiple of 8
+	make   lg(s)   a multiple of 8
+
+
+
+Example AAM
+
+	s     = 2^32     lg(s)   = 32
+	s*r   = 65,536   lg(s*r) = 16   (r = 2^16)
+	c     = 4096
+	e     = 1
+
+	database style. e=1 means it can query and message. a small r mean's we usually won't want large fractions of the data. Retrieving large fractions of database would defeat the purpose of using an AAM. A CPU could just loop over all the entries in regular memory if it needed a significant fraction of them.
+
+
+	         code       numberOfResponders[]     responder[][]
+	bytes     4          2 * 4096               4 * 65,536 * 4096
+	bytes     4           2^13                     2^30
+
+
+	this makes an address range of a little over one GByte. very big.
+	If we need to make it smaller, we can, and then we can just warn the user that when the total number of responders is higher than can fit in the address range, they'll be truncated. this will show up in the "code" section.
+
+
+
