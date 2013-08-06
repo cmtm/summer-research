@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 	Py_INCREF(Py_None);
 	PyList_SetItem(readMessage, 8, Py_None);
 	
-	pReturn = PyObject_CallMethodObjArgs(pInstance, PyString_FromString("readMessage"), readMessage, PyInt_FromLong(1), 0);
+	pReturn = PyObject_CallMethodObjArgs(pInstance, PyString_FromString("readMessage"), readMessage, 0);
 
 	printf("iterations: %d\n", PyInt_AsLong(pReturn));
 	
