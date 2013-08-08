@@ -1,4 +1,5 @@
 import itertools
+import collections
 import pydot
 
 class ClusteredGraph(object):
@@ -7,8 +8,13 @@ class ClusteredGraph(object):
 		# a node is a set of it's neighbors as (c,n) tuples
 		self.clusterSize = clusterSize
 		self.clusterCount = clusterCount
-		self.nodes = {c: { n:set() for n in range(clusterSize) } for c in range(clusterCount)}
-	
+
+		# old method. uses too much memory. default dict is better
+		# self.nodes = {c: { n:set() for n in range(clusterSize) } for c in range(clusterCount)}
+		# TODO: check bounds on inputs to call methods
+		self.nodes = collections.defaultdict(lambda:collections.defaultdict(set))
+
+		
 	def add_edge(self, n1, n2):
 		self.nodes[n1[0]][n1[1]].add(n2)
 		self.nodes[n2[0]][n2[1]].add(n1)
