@@ -1,0 +1,1 @@
+-O1 -march=armv7-a -std=c++11
