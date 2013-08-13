@@ -1,0 +1,9 @@
+= Benchmarking the AAM:
+
+I'm in a painful position right now, because I've just finished getting the Linux AAM driver working after over a week of work, but I'm now thinking that it might be better to benchmark the AAM on bare metal instead of on linux. There are several reasons for this.
+
+First off, Linux Drivers in ARM seem to be in a fluctuating state right now with no go to method of doing things. For basic programmed I/O, this isn't a problem, but DMA is more complicated. Since I ultimately want the AAM to act as a DMA device, I'll have to figure out which DMA driver type is the best. I simply don't have the know-how nor time to learn all that is necessary. Getting the right driver type is important since I want to avoid my benchmark results being skewed by large driver overhead. Some of the driver types do things like use an intermediate buffer that the kernel is then in charge of signaling DMA writes. This is useful in cases where a device needs to be shared by different programs. Another benefit is that the kernel can have tight control over who has access to what functionality of the device. For now, the benchmarks I envision need neither of these functionalities while they'll be negatively affected by the overhead (extra buffer copies, kernel system calls, ...).
+
+Also, A bare-metal benchmark will be easier to extract results from. Normally, having a full OS provides tools that make profiling easier, but since in my case the whole system is simulated, I can get precise and deterministic results directly from the simulator that runs the bare-bones benchmark. An OS running between the simulator and the benchmarking program would just pollute this.
+
+I'll explore how to get bare-metal apps running on the processor and if it's easy I might switch over to it. The work I did on the Linux driver can be useful later on if we start to look at more realistic applications.
