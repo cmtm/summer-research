@@ -7,3 +7,16 @@ First off, Linux Drivers in ARM seem to be in a fluctuating state right now with
 Also, A bare-metal benchmark will be easier to extract results from. Normally, having a full OS provides tools that make profiling easier, but since in my case the whole system is simulated, I can get precise and deterministic results directly from the simulator that runs the bare-bones benchmark. An OS running between the simulator and the benchmarking program would just pollute this.
 
 I'll explore how to get bare-metal apps running on the processor and if it's easy I might switch over to it. The work I did on the Linux driver can be useful later on if we start to look at more realistic applications.
+
+= Benchmark ideas
+
+.Basic stuff
+* search of unsorted data
+* search of sorted data
+* sort of data
+
+.More advanced
+* simple database queries
+* compression (LZ77)
+* string search/pattern matching
+* lexer (compiler)
