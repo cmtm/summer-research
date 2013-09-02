@@ -15,7 +15,7 @@
 #include <sys/mman.h>
 #include <fcntl.h>
 
-#define ASSOC_LENGTH 4096
+#define ASSOC_LENGTH 4
 #define WORD_SIZE 4
 #define AAM_ADDR 0x70000000
 #define ERASURE 0xFFFFFFFF

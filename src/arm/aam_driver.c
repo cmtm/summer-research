@@ -28,6 +28,8 @@ word* queryAssociation(const word* assoc) {
 	msync(device_base + 1, ASSOC_LENGTH * WORD_SIZE, MS_SYNC);
 	*device_base = QUERY;
 	msync(device_base, 1, MS_SYNC);
+
+	return device_base;
 }
 
 inline void eraseMessage(word* assoc, uint erasurePos) {
