@@ -1,0 +1,164 @@
+= My poster presentation on my summer AAM work
+
+== What I want to say
+
+=== Context
+
+Guys in Engineering want to make a novel memory called an AAM.
+
+This AAM technology is being explored as it might be better (faster and lower
+energy usage) than algorithms that use RAM.
+
+They want to have a better idea about what kinds of algorithms could benefit
+from it. Although this is partially to justify it's existance, the main goal
+is to guide the development of the device since at this stage a lot of the
+device specifics haven't been determined yet. 
+
+They wanted to collaborate with computer scientists to acheive this.
+
+
+=== My Objective
+
+Supplied with a mathematical model of the functionality of the device, I set
+out to explore how we could model the device in a simulated computing
+environment and then make a tool chain to create programs that could leverage
+the AAM.
+
+I had three parts to tackle:
+
+* Find a platform upon which to simulate a computer
+ 
+* go from the mathematical model of an AAM to a device that fits somewhere
+* into a computer system. This includes a protocol for communicating with it
+* and some kind of driver to access it from software.
+
+* Explore what computational problems that can be better solved using an AAM
+* and make programs that solve them in the simulated environment. Run
+* algorithms in the same environment which use RAM memories alone and compare
+* the result.
+
+=== The AAM
+
+describe what the AAM is (high level functionality)
+
+describe the basics of how the AAM works.
+
+describe the capabilites and limitations of the device.
+
+describe specifications that have yet to be determined 
+
+=== My work
+
+==== Find a platform upon which to simulate a computer system
+
+There are a few computer simulators and emulators available to use.
+
+After some preliminary research, I considered a few platforms.
+The two most promising were QEMU and gem5.
+
+I started with QEMU with is an emulator. After looking around the code base I
+saw that while a good emulator, the platform didn't make it easy to make your
+own devices and plug them into the architecture.
+
+I them moved on to gem5 which is a computer architechture simulator. While the
+project was much smaller and the documentation was very lacking, I found the
+code very well organized and it was designed with facilities to allow the easy
+creation and integration of custom devices. (sweet! just what I'm looking for)
+
+gem5 was able to simulated a bunch of computer architectures and devices.
+The engineers wanted the device to run on a full featured platform while still
+being simple enough to easily experiment with we decided on the ARM
+architecture, more specifically an ARMv7-A device.
+
+==== Dream into (virtual)sub reality
+
+They worked out the math behind it and I coded it up. There were a
+few differen't AAM versions so I had a few different models. I made the model
+so that it was parameteriasable (that's a word right?). Specs that could be
+controlled were speed, size (number of clusters and number of neurons per
+cluster) and some functionality (didn't get to doing this very much). gem5 has
+a great feature with allows a user to pass parameters to the simulation
+components (like the custom AAM device) through command line options to the
+simulator. This allowed me to easily explore different AAMs wihout much
+trouble.
+
+==== How the AAM fits into a computer system
+
+The engineers at no conceptions at this point in the development as to where
+the AAM should fit into a computer system so I had the freedom to choose.
+There were two decisions I had to make, how would the hardware device fit into
+the physical system, and how would the interface to this device be exposed to
+the software.
+
+On the hardware front, I had to choose what bus the device should go on and
+how the CPU would access it. I wanted to avoid too much IO overhead this early
+in the project so I put it right on the memory bus. This would mean that it
+would have to same access delay as RAM (note that this is still much slower
+than cache with is where most memory accesses occur). ARM is uses memory
+mapped IO, so I looked for a free address space in the ARM device and selected
+the range I needed as the AAMs memory location. This range happened to start at
+0x70000000 so whenever the CPU would read from the location 0x70000000, it
+would access the AAM instead of RAM.
+
+I created a protocol for the device where writing within it's memory range
+would trigger certain actions. For example, writing the value 1 in location
+0x70000000 followed by a message starting at address 0x70000004 would cause
+the AAM to store the message. Similarly, there are ways to read messages,
+reset the AAM delete messages and to get operating statistics.
+
+With the hardware aspect taken care of, next up was the software. I was
+undecided between having my programs run in a linux environment or make them
+run on "bare-metal". The linux environment required me to write a driver, but
+would have the benefit of having a full OS in which to run my programs.
+
+Bare-metal would be possible more difficult to develop as not only have I
+never done it but I would have to manage crosscompiling all the dependancies
+statically into my exectuables. It would run much faster than a simulated
+computer running linux though, and I wouldn't have to worry about the kernel
+adding overhead to IO access.
+
+I ended up going with the linux environment but I regret it after realizing
+how many complications it brought up. Writing the device driver was a pain
+and I ran into a lot of hasstle when trying to cross compile a linux driver
+from my x86 machine to the ARM platform. Running linux also made IO overhead
+blur my results and made getting profiling data from outside the simulator
+difficult.
+
+I had to stick with my decision since I didn't have much time left and I
+didn't want to risk ending the summer without any results. I tried profiling
+the code using profilers such as perf or gprof, but it turned out to be
+simpler and more accurate to just use timers which record code flow.
+
+==== Problem exploration
+
+The computing problem the AAM could handle well was databases.
+Database table map very naturally to an AAM associations and the ability to
+search for entries based on content is one of the main features of databases.
+Using and AAM, an arbitrart lookup could be done in O(1) time.
+
+Another potential computing problem is compression and decompression. I didn't
+get to look at this in depth but it would be the next one on my list.
+Storing a dynamic dictionary encoder inside the AAM would make translations very
+efficient.
+
+I didn't get to look at the compression problem, but I'm currently working on
+the database one. I've written up a simple database that creates tables with
+random data. The nature of the data can be controlled by selecting probability
+funtions (uniform or normal) and specifiying wether it's ordered or not and if
+it's allowed duplicates.
+
+I've done a few preliminary runs and for very simple table lookups, this is
+what I got in the simulator.
+
+task: 
+                   time taken for 100 queries
+Unordered search:      4899 microseconds
+ordered   search:        53 microseconds
+AAM       search:        44 microseconds
+
+Once I get access to a strong computer I'm going to run more sophisticated
+operations.
+
+
+
+

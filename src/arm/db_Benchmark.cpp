@@ -11,7 +11,7 @@
 
 #include "aam_driver.h"
 
-#define ROWS 16384
+#define ROWS 12
 template <class cell_t>
 class Table {
 public:
@@ -156,7 +156,7 @@ public:
 		// return queryAssociation(message);
 		// this returns pointer to AAM data
 		// lets return iterator to RAM table instead 
-		return &getCellRef(column, queryAssociation(message)[ASSOC_LENGTH - 1]);
+		return &getCellRef(queryAssociation(message)[ASSOC_LENGTH - 1], column);
 	}
 
 
@@ -317,21 +317,18 @@ int test_AAM(Table<uint32_t>& tble, std::vector<std::pair<cell_t, Table<uint32_t
 int main(void) {
 	// take initial program time
 	auto start_time = std::chrono::steady_clock::now();
-	// let's test this table out
-	// test_table();
-	// initialize AAM driver
 	Table<uint32_t> tble = tableGen();
-	//init_driver();
-	//tble.store_in_AAM();
+	// initialize AAM driver
+	init_driver();
 
-	// tble.printTable();
+	tble.store_in_AAM();
 
 	// generate trials
 	// 0th column contains enumeration
 	// 1st        contains uniformly ordered
 	// 2nd        contains binomial (with dups) and ordered
 	// 3rd        contains uniform unordered
-	auto trials = tble.generateTrials(1, 1000, 0, ROWS-1);
+	auto trials = tble.generateTrials(1, 100, 0, ROWS-1);
 	
 	auto init_time = std::chrono::steady_clock::now();
 
@@ -341,10 +338,14 @@ int main(void) {
 	std::cout << "return of test_ordered: :" << test_Ordered_RAM(tble, trials, 1) << std::endl;
 	auto ordered_time = std::chrono::steady_clock::now();
 
+	std::cout << "return of test_AAM :" << test_AAM(tble, trials, 1) << std::endl;
+	auto aam_time = std::chrono::steady_clock::now();
+
 	std::cout << "time taken to run program: \n";
-	std::cout << "initialization:  " << std::chrono::duration_cast<std::chrono::nanoseconds>(init_time - start_time).count() << std::endl;
-	std::cout << "unordered time:  " << std::chrono::duration_cast<std::chrono::nanoseconds>(unordered_time - init_time).count()<< std::endl;
-	std::cout << "ordered time:    " << std::chrono::duration_cast<std::chrono::nanoseconds>(ordered_time - unordered_time).count() << std::endl;
+	std::cout << "initialization:  " << std::chrono::duration_cast<std::chrono::microseconds>(init_time - start_time).count() << std::endl;
+	std::cout << "unordered time:  " << std::chrono::duration_cast<std::chrono::microseconds>(unordered_time - init_time).count()<< std::endl;
+	std::cout << "ordered time:    " << std::chrono::duration_cast<std::chrono::microseconds>(ordered_time - unordered_time).count() << std::endl;
+	std::cout << "aam time:        " << std::chrono::duration_cast<std::chrono::microseconds>(aam_time - ordered_time).count() << std::endl;
 	std::cout << "\nclock stats\n";
 	std::cout << "clock frequency: " << std::chrono::steady_clock::period::den
 	          << "is the clock steady: " << std::chrono::steady_clock::is_steady

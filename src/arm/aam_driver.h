@@ -20,7 +20,7 @@
 #define AAM_ADDR 0x70000000
 #define ERASURE 0xFFFFFFFF
 
-#define MAP_SIZE (ASSOC_LENGTH * WORD_SIZE + 1)
+#define MAP_SIZE (ASSOC_LENGTH * WORD_SIZE * 10)
 
 // this typedef is based on the WORD_SIZE
 typedef uint32_t word;
