@@ -11,7 +11,7 @@
 
 #include "aam_driver.h"
 
-#define ROWS 12
+#define ROWS 32768
 template <class cell_t>
 class Table {
 public:
@@ -328,17 +328,17 @@ int main(void) {
 	// 1st        contains uniformly ordered
 	// 2nd        contains binomial (with dups) and ordered
 	// 3rd        contains uniform unordered
-	auto trials = tble.generateTrials(1, 100, 0, ROWS-1);
+	auto trials = tble.generateTrials(1, 1000, 0, ROWS-1);
 	
 	auto init_time = std::chrono::steady_clock::now();
 
-	std::cout << "return of test_Unordered: :" << test_Unordered_RAM(tble, trials, 1) << std::endl;
+	test_Unordered_RAM(tble, trials, 1);
 	auto unordered_time = std::chrono::steady_clock::now();
 
-	std::cout << "return of test_ordered: :" << test_Ordered_RAM(tble, trials, 1) << std::endl;
+	test_Ordered_RAM(tble, trials, 1);
 	auto ordered_time = std::chrono::steady_clock::now();
 
-	std::cout << "return of test_AAM :" << test_AAM(tble, trials, 1) << std::endl;
+	test_AAM(tble, trials, 1);
 	auto aam_time = std::chrono::steady_clock::now();
 
 	std::cout << "time taken to run program: \n";
@@ -348,7 +348,7 @@ int main(void) {
 	std::cout << "aam time:        " << std::chrono::duration_cast<std::chrono::microseconds>(aam_time - ordered_time).count() << std::endl;
 	std::cout << "\nclock stats\n";
 	std::cout << "clock frequency: " << std::chrono::steady_clock::period::den
-	          << "is the clock steady: " << std::chrono::steady_clock::is_steady
+	          << "\nis the clock steady: " << std::chrono::steady_clock::is_steady
 		  << std::endl;
 
 	return 0;
